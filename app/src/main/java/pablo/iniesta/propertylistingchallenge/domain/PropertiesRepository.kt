@@ -3,13 +3,15 @@ package pablo.iniesta.propertylistingchallenge.domain
 import pablo.iniesta.propertylistingchallenge.data.api.PropertiesApi
 import pablo.iniesta.propertylistingchallenge.data.api.responses.PropertyDetail
 import pablo.iniesta.propertylistingchallenge.data.api.responses.PropertyList
+import pablo.iniesta.propertylistingchallenge.data.db.PropertiesDao
 import pablo.iniesta.propertylistingchallenge.util.Resource
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class PropertiesRepository @Inject constructor(
-    private val propertiesApi: PropertiesApi
+    private val propertiesApi: PropertiesApi,
+    private val propertiesDao: PropertiesDao
 ){
 
     suspend fun getProperties(): Resource<PropertyList> {

@@ -15,8 +15,8 @@ converterGson = "2.9.0"
 okhttp = "4.12.0"
 kotlinxCoroutines = "1.10.1"
 hiltAndroid = "2.52"
-roomRuntime = "2.6.1"
-navigation = "2.8.6"
+roomRuntime = "2.7.0-beta01"
+navigation = "2.8.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

@@ -1,12 +1,14 @@
-package pablo.iniesta.propertylistingchallenge
+package pablo.iniesta.propertylistingchallenge.presentation
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import pablo.iniesta.propertylistingchallenge.R
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

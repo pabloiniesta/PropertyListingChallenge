@@ -10,12 +10,12 @@ import pablo.iniesta.propertylistingchallenge.data.api.responses.PriceInfo
 class PropertyTypeConverters {
 
     @TypeConverter
-    fun toPriceInfo(priceInfo: PriceInfo): String {
+    fun fromPriceInfo(priceInfo: PriceInfo): String {
         return Gson().toJson(priceInfo)
     }
 
     @TypeConverter
-    fun fromPriceInfo(data: String): PriceInfo {
+    fun toPriceInfo(data: String): PriceInfo {
         val listType = object : TypeToken<PriceInfo>() {}.type
         return Gson().fromJson(data, listType)
     }

@@ -35,6 +35,10 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    buildFeatures {
+        dataBinding = true
+    }
 }
 
 dependencies {
@@ -73,4 +77,7 @@ dependencies {
     //Navigation
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+
+    //Glide
+    implementation(libs.glide)
 }

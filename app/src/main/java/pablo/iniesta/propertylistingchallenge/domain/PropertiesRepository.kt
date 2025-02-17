@@ -1,9 +1,11 @@
 package pablo.iniesta.propertylistingchallenge.domain
 
+import android.util.Log
 import pablo.iniesta.propertylistingchallenge.data.api.PropertiesApi
 import pablo.iniesta.propertylistingchallenge.data.api.responses.PropertyDetail
 import pablo.iniesta.propertylistingchallenge.data.api.responses.PropertyList
 import pablo.iniesta.propertylistingchallenge.data.db.PropertiesDao
+import pablo.iniesta.propertylistingchallenge.data.db.PropertyEntity
 import pablo.iniesta.propertylistingchallenge.util.Resource
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -12,15 +14,24 @@ import javax.inject.Singleton
 class PropertiesRepository @Inject constructor(
     private val propertiesApi: PropertiesApi,
     private val propertiesDao: PropertiesDao
-){
+) {
 
-    suspend fun getProperties(): Resource<PropertyList> {
-        val response = try {
-            propertiesApi.getProperties()
-        } catch (e: Exception) {
-            return Resource.Error(e.message ?: "An unknown error occurred")
+    suspend fun getProperties(): Resource<List<PropertyEntity>> {
+        val propertyList: List<PropertyEntity>
+        if (propertiesDao.isDatabaseEmpty()) {
+            Log.d("XXX","DB EMPTY, GET FROM API")
+            val response = try {
+                propertiesApi.getProperties()
+            } catch (e: Exception) {
+                return Resource.Error(e.message ?: "An unknown error occurred")
+            }
+            propertyList = mapApiListToEntityList(response)
+            propertiesDao.insertProperties(propertyList)
+        } else {
+            Log.d("XXX","DB NOT EMPTY, LOAD ITEMS")
+            propertyList = propertiesDao.getProperties()
         }
-        return Resource.Success(response)
+        return Resource.Success(propertyList)
     }
 
     suspend fun getPropertyDetail(): Resource<PropertyDetail> {
@@ -30,5 +41,23 @@ class PropertiesRepository @Inject constructor(
             return Resource.Error(e.message ?: "An unknown error occurred")
         }
         return Resource.Success(response)
+    }
+
+    private fun mapApiListToEntityList(propertyList: PropertyList): List<PropertyEntity> {
+        return propertyList.map { propertyListItem ->
+            PropertyEntity(
+                propertyCode = propertyListItem.propertyCode,
+                thumbnail = propertyListItem.thumbnail,
+                price = propertyListItem.price,
+                priceInfo = propertyListItem.priceInfo,
+                size = propertyListItem.size,
+                rooms = propertyListItem.rooms,
+                address = propertyListItem.address,
+                district = propertyListItem.district,
+                neighborhood = propertyListItem.neighborhood,
+                operation = propertyListItem.operation,
+                isFavorite = false
+            )
+        }
     }
 }

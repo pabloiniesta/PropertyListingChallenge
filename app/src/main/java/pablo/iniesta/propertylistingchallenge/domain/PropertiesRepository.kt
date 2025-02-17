@@ -34,6 +34,10 @@ class PropertiesRepository @Inject constructor(
         return Resource.Success(propertyList)
     }
 
+    suspend fun updateProperty(property: PropertyEntity) {
+        propertiesDao.updateProperty(property)
+    }
+
     suspend fun getPropertyDetail(): Resource<PropertyDetail> {
         val response = try {
             propertiesApi.getPropertyDetail()
@@ -48,14 +52,12 @@ class PropertiesRepository @Inject constructor(
             PropertyEntity(
                 propertyCode = propertyListItem.propertyCode,
                 thumbnail = propertyListItem.thumbnail,
-                price = propertyListItem.price,
                 priceInfo = propertyListItem.priceInfo,
                 size = propertyListItem.size,
                 rooms = propertyListItem.rooms,
                 address = propertyListItem.address,
                 district = propertyListItem.district,
                 neighborhood = propertyListItem.neighborhood,
-                operation = propertyListItem.operation,
                 isFavorite = false
             )
         }

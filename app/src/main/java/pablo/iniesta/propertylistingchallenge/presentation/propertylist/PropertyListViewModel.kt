@@ -18,15 +18,17 @@ class PropertyListViewModel @Inject constructor(
 
     val properties: MutableLiveData<Resource<List<PropertyEntity>>> = MutableLiveData()
 
-    init {
-        getProperties()
-    }
-
     fun getProperties() {
         Log.d("XXX","GET PROPERTIES")
         viewModelScope.launch {
             properties.postValue(Resource.Loading())
             properties.postValue(repository.getProperties())
+        }
+    }
+
+    fun updateFavoritedProperty(property: PropertyEntity) {
+        viewModelScope.launch {
+            repository.updateProperty(property.copy(isFavorite = !property.isFavorite))
         }
     }
 }

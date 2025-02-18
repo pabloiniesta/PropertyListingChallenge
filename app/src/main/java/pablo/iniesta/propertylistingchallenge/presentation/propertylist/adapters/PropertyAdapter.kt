@@ -24,6 +24,13 @@ class PropertyAdapter(private val listener: PropertyListItemListener) :
         override fun areContentsTheSame(oldItem: PropertyEntity, newItem: PropertyEntity): Boolean {
             return oldItem == newItem
         }
+
+        override fun getChangePayload(oldItem: PropertyEntity, newItem: PropertyEntity): Any? {
+            return when {
+                oldItem.isFavorite != newItem.isFavorite -> PropertyListItemChangePayload.FavoriteChanged
+                else -> null
+            }
+        }
     }
 
     val differ = AsyncListDiffer(this, diffCallback)
@@ -36,6 +43,25 @@ class PropertyAdapter(private val listener: PropertyListItemListener) :
 
     override fun getItemCount(): Int {
         return differ.currentList.size
+    }
+
+    override fun onBindViewHolder(
+        holder: PropertyViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position)
+        } else {
+            for (payload in payloads) {
+                when (payload) {
+                    is PropertyListItemChangePayload.FavoriteChanged -> {
+                        holder.binding.favoriteButton.isChecked =
+                            differ.currentList[position].isFavorite
+                    }
+                }
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")

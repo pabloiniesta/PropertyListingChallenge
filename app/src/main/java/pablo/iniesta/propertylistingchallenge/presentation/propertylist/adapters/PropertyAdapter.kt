@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import pablo.iniesta.propertylistingchallenge.R
 import pablo.iniesta.propertylistingchallenge.data.db.PropertyEntity
 import pablo.iniesta.propertylistingchallenge.databinding.ItemPropertyBinding
 import pablo.iniesta.propertylistingchallenge.util.DateUtils.toSimpleFormat
@@ -70,17 +71,27 @@ class PropertyAdapter(private val listener: PropertyListItemListener) :
         }
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: PropertyViewHolder, position: Int) {
         val property = differ.currentList[position]
         holder.binding.apply {
             Glide.with(this.root).load(property.thumbnail).into(thumbnail)
-            propertyAddress.text = "Piso en ${property.address}"
-            propertyArea.text = "${property.district}, ${property.neighborhood}"
+            propertyAddress.text =
+                this.root.context.getString(R.string.property_address_text, property.address)
+            propertyArea.text = this.root.context.getString(
+                R.string.property_area_text,
+                property.district,
+                property.neighborhood
+            )
             propertyPrice.text =
-                "${property.priceInfo.price.amount.toInt()} ${property.priceInfo.price.currencySuffix}"
-            propertyRooms.text = "${property.rooms} hab."
-            propertySize.text = "${property.size} m²"
+                this.root.context.getString(
+                    R.string.property_price_text,
+                    property.priceInfo.price.amount.toInt(),
+                    property.priceInfo.price.currencySuffix
+                )
+            propertyRooms.text =
+                this.root.context.getString(R.string.property_rooms_text, property.rooms)
+            propertySize.text =
+                this.root.context.getString(R.string.property_size_text, property.size.toInt())
             favoriteButton.isChecked = property.isFavorite
             favoriteDate.setFavoritedDate(property)
 
@@ -97,7 +108,10 @@ class PropertyAdapter(private val listener: PropertyListItemListener) :
     @SuppressLint("SetTextI18n")
     private fun TextView.setFavoritedDate(property: PropertyEntity) {
         if (property.favoritedDate != null) {
-            this.text = "Fav Date: ${property.favoritedDate.toSimpleFormat()}"
+            this.text = context.getString(
+                R.string.property_fav_date_text,
+                property.favoritedDate.toSimpleFormat()
+            )
             this.visibility = View.VISIBLE
         } else {
             this.visibility = View.GONE

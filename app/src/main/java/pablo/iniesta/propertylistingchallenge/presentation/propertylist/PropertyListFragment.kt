@@ -42,8 +42,8 @@ class PropertyListFragment : Fragment(), PropertyListItemListener {
         navigateToPropertyDetails()
     }
 
-    override fun onFavoriteClick(property: PropertyEntity) {
-        viewModel.updateFavoritedProperty(property)
+    override fun onFavoriteClick(property: PropertyEntity, isFav: Boolean) {
+        viewModel.updateFavoritedProperty(property, isFav)
     }
 
     private fun setupObservers() {

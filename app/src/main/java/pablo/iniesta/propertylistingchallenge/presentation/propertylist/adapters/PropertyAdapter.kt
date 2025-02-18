@@ -2,13 +2,16 @@ package pablo.iniesta.propertylistingchallenge.presentation.propertylist.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import pablo.iniesta.propertylistingchallenge.data.db.PropertyEntity
 import pablo.iniesta.propertylistingchallenge.databinding.ItemPropertyBinding
+import pablo.iniesta.propertylistingchallenge.util.DateUtils.toSimpleFormat
 
 class PropertyAdapter(private val listener: PropertyListItemListener) :
     RecyclerView.Adapter<PropertyAdapter.PropertyViewHolder>() {
@@ -53,11 +56,14 @@ class PropertyAdapter(private val listener: PropertyListItemListener) :
         if (payloads.isEmpty()) {
             onBindViewHolder(holder, position)
         } else {
+            val property = differ.currentList[position]
             for (payload in payloads) {
                 when (payload) {
                     is PropertyListItemChangePayload.FavoriteChanged -> {
-                        holder.binding.favoriteButton.isChecked =
-                            differ.currentList[position].isFavorite
+                        holder.binding.apply {
+                            favoriteButton.isChecked = property.isFavorite
+                            favoriteDate.setFavoritedDate(property)
+                        }
                     }
                 }
             }
@@ -76,14 +82,25 @@ class PropertyAdapter(private val listener: PropertyListItemListener) :
             propertyRooms.text = "${property.rooms} hab."
             propertySize.text = "${property.size} m²"
             favoriteButton.isChecked = property.isFavorite
+            favoriteDate.setFavoritedDate(property)
 
             root.setOnClickListener {
                 listener.onItemClick(property)
             }
 
-            favoriteButton.setOnCheckedChangeListener { _, _ ->
-                listener.onFavoriteClick(property)
+            favoriteButton.setOnCheckedChangeListener { _, isFav ->
+                listener.onFavoriteClick(property, isFav)
             }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun TextView.setFavoritedDate(property: PropertyEntity) {
+        if (property.favoritedDate != null) {
+            this.text = "Fav Date: ${property.favoritedDate.toSimpleFormat()}"
+            this.visibility = View.VISIBLE
+        } else {
+            this.visibility = View.GONE
         }
     }
 }

@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import pablo.iniesta.propertylistingchallenge.data.db.PropertyEntity
 import pablo.iniesta.propertylistingchallenge.domain.PropertiesRepository
 import pablo.iniesta.propertylistingchallenge.util.Resource
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,16 +24,21 @@ class PropertyListViewModel @Inject constructor(
     }
 
     private fun getProperties() {
-        Log.d("XXX","GET PROPERTIES")
+        Log.d("XXX", "GET PROPERTIES")
         viewModelScope.launch {
             properties.postValue(Resource.Loading())
             properties.postValue(repository.getProperties())
         }
     }
 
-    fun updateFavoritedProperty(property: PropertyEntity) {
+    fun updateFavoritedProperty(property: PropertyEntity, isFav: Boolean) {
         viewModelScope.launch {
-            repository.updateProperty(property.copy(isFavorite = !property.isFavorite))
+            repository.updateProperty(
+                property.copy(
+                    isFavorite = isFav,
+                    favoritedDate = if (isFav) Date() else null
+                )
+            )
             properties.postValue(repository.getProperties())
         }
     }

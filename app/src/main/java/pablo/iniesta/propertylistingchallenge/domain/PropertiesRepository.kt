@@ -1,6 +1,5 @@
 package pablo.iniesta.propertylistingchallenge.domain
 
-import android.util.Log
 import pablo.iniesta.propertylistingchallenge.data.api.PropertiesApi
 import pablo.iniesta.propertylistingchallenge.data.api.responses.PropertyDetail
 import pablo.iniesta.propertylistingchallenge.data.api.responses.PropertyList
@@ -19,7 +18,6 @@ class PropertiesRepository @Inject constructor(
     suspend fun getProperties(): Resource<List<PropertyEntity>> {
         val propertyList: List<PropertyEntity>
         if (propertiesDao.isDatabaseEmpty()) {
-            Log.d("XXX","DB EMPTY, GET FROM API")
             val response = try {
                 propertiesApi.getProperties()
             } catch (e: Exception) {
@@ -28,7 +26,6 @@ class PropertiesRepository @Inject constructor(
             propertyList = mapApiListToEntityList(response)
             propertiesDao.insertProperties(propertyList)
         } else {
-            Log.d("XXX","DB NOT EMPTY, LOAD ITEMS")
             propertyList = propertiesDao.getProperties()
         }
         return Resource.Success(propertyList)

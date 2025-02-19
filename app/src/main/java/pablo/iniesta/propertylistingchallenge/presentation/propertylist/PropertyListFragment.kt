@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,19 +52,20 @@ class PropertyListFragment : Fragment(), PropertyListItemListener {
             when (response) {
                 is Resource.Success -> {
                     response.data?.let { properties ->
-                        Log.d("XXX", "SUCCESS LOADING: " + properties)
+                        hideLoader()
                         propertyAdapter.differ.submitList(properties)
                     }
                 }
 
                 is Resource.Error -> {
                     response.message?.let { message ->
-                        Log.d("XXX", "ERROR LOADING: " + message)
+                        Toast.makeText(context, "An error occurred: $message", Toast.LENGTH_LONG)
+                            .show()
                     }
                 }
 
                 is Resource.Loading -> {
-                    Log.d("XXX", "LOADING IN PROGRESS")
+                    showLoader()
                 }
             }
         }
@@ -79,5 +81,13 @@ class PropertyListFragment : Fragment(), PropertyListItemListener {
 
     private fun navigateToPropertyDetails() {
         findNavController().navigate(R.id.action_propertyListFragment_to_propertyDetailFragment)
+    }
+
+    private fun showLoader() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideLoader() {
+        binding.progressBar.visibility = View.GONE
     }
 }

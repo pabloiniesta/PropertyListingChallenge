@@ -1,11 +1,10 @@
 package pablo.iniesta.propertylistingchallenge.presentation.propertydetail
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -61,7 +61,7 @@ class PropertyDetailFragment : Fragment() {
             when (response) {
                 is Resource.Success -> {
                     response.data?.let { propertyDetail ->
-                        Log.d("XXX", "SUCCESS LOADING DETAIL: " + propertyDetail)
+                        hideLoader()
                         setupPropertyImages(propertyDetail)
                         setupPropertyDetails(propertyDetail)
                     }
@@ -69,12 +69,13 @@ class PropertyDetailFragment : Fragment() {
 
                 is Resource.Error -> {
                     response.message?.let { message ->
-                        Log.d("XXX", "ERROR LOADING: " + message)
+                        Toast.makeText(context, "An error occurred: $message", Toast.LENGTH_LONG)
+                            .show()
                     }
                 }
 
                 is Resource.Loading -> {
-                    Log.d("XXX", "LOADING IN PROGRESS")
+                    showLoader()
                 }
             }
         }
@@ -162,5 +163,13 @@ class PropertyDetailFragment : Fragment() {
             )
             properyDescription.text = propertyDetail.propertyComment
         }
+    }
+
+    private fun showLoader() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideLoader() {
+        binding.progressBar.visibility = View.GONE
     }
 }

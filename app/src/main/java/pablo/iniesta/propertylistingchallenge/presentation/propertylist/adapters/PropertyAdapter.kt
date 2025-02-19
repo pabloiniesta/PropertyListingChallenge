@@ -105,7 +105,6 @@ class PropertyAdapter(private val listener: PropertyListItemListener) :
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun TextView.setFavoritedDate(property: PropertyEntity) {
         if (property.favoritedDate != null) {
             this.text = context.getString(

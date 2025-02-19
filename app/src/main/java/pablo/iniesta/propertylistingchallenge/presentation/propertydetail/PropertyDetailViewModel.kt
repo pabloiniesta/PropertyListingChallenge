@@ -22,8 +22,8 @@ class PropertyDetailViewModel @Inject constructor(
     }
 
     private fun getPropertyDetail() {
+        propertyDetail.postValue(Resource.Loading())
         viewModelScope.launch {
-            propertyDetail.postValue(Resource.Loading())
             propertyDetail.postValue(repository.getPropertyDetail())
         }
     }

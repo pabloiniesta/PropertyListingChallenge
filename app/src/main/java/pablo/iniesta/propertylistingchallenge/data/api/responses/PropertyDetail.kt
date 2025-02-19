@@ -10,7 +10,7 @@ data class PropertyDetail(
     val multimedia: PropertyMultimedia,
     val operation: String,
     val price: Double,
-    val priceInfo: PriceInfoX,
+    val priceInfo: PriceInfoPropertyDetail,
     val propertyComment: String,
     val propertyType: String,
     val state: String,

@@ -22,7 +22,7 @@ class PropertyDetailViewModel @Inject constructor(
     }
 
     private fun getPropertyDetail() {
-        propertyDetail.postValue(Resource.Loading())
+        propertyDetail.value = Resource.Loading()
         viewModelScope.launch {
             propertyDetail.postValue(repository.getPropertyDetail())
         }

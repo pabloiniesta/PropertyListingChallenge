@@ -24,8 +24,7 @@ class PropertyListViewModel @Inject constructor(
     }
 
     private fun getProperties() {
-        Log.d("XXX", "GET PROPERTIES")
-        properties.postValue(Resource.Loading())
+        properties.value = Resource.Loading()
         viewModelScope.launch {
             properties.postValue(repository.getProperties())
         }

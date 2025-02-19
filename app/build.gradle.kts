@@ -56,9 +56,17 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
+    //Testing
+    testImplementation(libs.androidx.compose.junit4)
+    testImplementation(libs.hilt.android.testing)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(libs.google.truth)
+    androidTestImplementation(libs.google.truth)
+    testImplementation(libs.testing.mockk)
+    testImplementation(libs.core.testing)
 
     // Retrofit
     implementation(libs.retrofit)

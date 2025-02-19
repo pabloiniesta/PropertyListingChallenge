@@ -13,6 +13,7 @@ import pablo.iniesta.propertylistingchallenge.R
 import pablo.iniesta.propertylistingchallenge.data.db.PropertyEntity
 import pablo.iniesta.propertylistingchallenge.databinding.ItemPropertyBinding
 import pablo.iniesta.propertylistingchallenge.util.DateUtils.toSimpleFormat
+import java.util.Locale
 
 class PropertyAdapter(private val listener: PropertyListItemListener) :
     RecyclerView.Adapter<PropertyAdapter.PropertyViewHolder>() {
@@ -109,7 +110,7 @@ class PropertyAdapter(private val listener: PropertyListItemListener) :
         if (property.favoritedDate != null) {
             this.text = context.getString(
                 R.string.property_fav_date_text,
-                property.favoritedDate.toSimpleFormat()
+                property.favoritedDate.toSimpleFormat(Locale.getDefault())
             )
             this.visibility = View.VISIBLE
         } else {
